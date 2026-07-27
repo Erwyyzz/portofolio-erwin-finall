@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erwin Setiawan | Fullstack Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0b0e1a;
+            color: #e0e8f5;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0e1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e90ff;
+            border-radius: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== PARTICLE CANVAS ===== */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 16px 0;
+            background: rgba(11, 14, 26, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(30, 144, 255, 0.15);
+            transition: 0.3s;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e90ff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: #e0e8f5;
+            -webkit-text-fill-color: #e0e8f5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #a0b4d0;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #1e90ff;
+            transition: 0.3s;
+            box-shadow: 0 0 10px #1e90ff;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.6rem;
+            color: #e0e8f5;
+            cursor: pointer;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .hero-text h1 .highlight {
+            background: linear-gradient(135deg, #1e90ff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text .typing-wrap {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #80b4ff;
+            min-height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text .typing-wrap .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.6rem;
+            background: #1e90ff;
+            margin-left: 4px;
+            vertical-align: text-bottom;
+            animation: blink 0.8s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            color: #90a8c8;
+            max-width: 500px;
+            margin-bottom: 32px;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .badge {
+            background: rgba(30, 144, 255, 0.12);
+            border: 1px solid rgba(30, 144, 255, 0.25);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #80b4ff;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e90ff, #0077e6);
+            color: #fff;
+            box-shadow: 0 4px 30px rgba(30, 144, 255, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(30, 144, 255, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(30, 144, 255, 0.5);
+            color: #e0e8f5;
+        }
+        .btn-outline:hover {
+            background: rgba(30, 144, 255, 0.1);
+            border-color: #1e90ff;
+            transform: translateY(-3px);
+        }
+
+        .hero-avatar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .avatar-box {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.15), rgba(0, 191, 255, 0.05));
+            border: 2px solid rgba(30, 144, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
+            font-weight: 700;
+            color: #1e90ff;
+            box-shadow: 0 0 80px rgba(30, 144, 255, 0.15);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .avatar-box .ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid rgba(30, 144, 255, 0.15);
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-16px);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== SECTION UMUM ===== */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, #1e90ff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: #90a8c8;
+            margin-bottom: 48px;
+            font-size: 1.05rem;
+        }
+
+        /* ===== TENTANG ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .about-text p {
+            color: #90a8c8;
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(30, 144, 255, 0.06);
+            border: 1px solid rgba(30, 144, 255, 0.12);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: 0.3s;
+            backdrop-filter: blur(4px);
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(30, 144, 255, 0.4);
+            box-shadow: 0 8px 40px rgba(30, 144, 255, 0.08);
+        }
+
+        .stat-card .number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e90ff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card .label {
+            color: #90a8c8;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        /* ===== SKILLS ===== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-item {
+            background: rgba(30, 144, 255, 0.06);
+            border: 1px solid rgba(30, 144, 255, 0.12);
+            border-radius: 16px;
+            padding: 20px 12px;
+            text-align: center;
+            transition: 0.3s;
+            backdrop-filter: blur(4px);
+        }
+        .skill-item:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: #1e90ff;
+            box-shadow: 0 8px 40px rgba(30, 144, 255, 0.12);
+        }
+
+        .skill-item i {
+            font-size: 2.4rem;
+            color: #1e90ff;
+            margin-bottom: 8px;
+        }
+
+        .skill-item span {
+            display: block;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* ===== PROYEK ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: rgba(30, 144, 255, 0.04);
+            border: 1px solid rgba(30, 144, 255, 0.12);
+            border-radius: 20px;
+            padding: 28px 24px;
+            transition: 0.4s;
+            backdrop-filter: blur(4px);
+            perspective: 800px;
+        }
+        .project-card:hover {
+            transform: translateY(-10px) rotateX(2deg);
+            border-color: rgba(30, 144, 255, 0.4);
+            box-shadow: 0 20px 60px rgba(30, 144, 255, 0.1);
+        }
+
+        .project-card .icon {
+            font-size: 2.4rem;
+            color: #1e90ff;
+            margin-bottom: 12px;
+        }
+
+        .project-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .project-card p {
+            color: #90a8c8;
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+        }
+
+        .project-card .tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .project-card .tech span {
+            background: rgba(30, 144, 255, 0.1);
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #80b4ff;
+            border: 1px solid rgba(30, 144, 255, 0.15);
+        }
+
+        /* ===== SERTIFIKAT ===== */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .cert-card {
+            background: rgba(30, 144, 255, 0.04);
+            border: 1px solid rgba(30, 144, 255, 0.12);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: 0.3s;
+            backdrop-filter: blur(4px);
+        }
+        .cert-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #1e90ff;
+            box-shadow: 0 8px 40px rgba(30, 144, 255, 0.1);
+        }
+
+        .cert-card i {
+            font-size: 2.8rem;
+            color: #1e90ff;
+            margin-bottom: 10px;
+        }
+
+        .cert-card h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .cert-card p {
+            color: #90a8c8;
+            font-size: 0.85rem;
+        }
+
+        /* ===== KONTAK ===== */
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+
+        .contact-info p {
+            color: #90a8c8;
+            margin-bottom: 24px;
+        }
+
+        .contact-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .contact-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(30, 144, 255, 0.08);
+            border: 1px solid rgba(30, 144, 255, 0.2);
+            font-size: 1.4rem;
+            color: #e0e8f5;
+            transition: 0.3s;
+        }
+        .contact-social a:hover {
+            background: #1e90ff;
+            color: #fff;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.3);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            background: rgba(30, 144, 255, 0.06);
+            border: 1px solid rgba(30, 144, 255, 0.15);
+            border-radius: 12px;
+            color: #e0e8f5;
+            font-size: 1rem;
+            transition: 0.3s;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #1e90ff;
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.08);
+            background: rgba(30, 144, 255, 0.08);
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: #6080a8;
+        }
+
+        .contact-form .btn {
+            width: 100%;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 32px 0;
+            border-top: 1px solid rgba(30, 144, 255, 0.08);
+            color: #6080a8;
+            font-size: 0.9rem;
+        }
+
+        footer .heart {
+            color: #ff4d6d;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-text p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-badges {
+                justify-content: center;
+            }
+            .hero-btns {
+                justify-content: center;
+            }
+            .hero-avatar {
+                order: -1;
+            }
+            .avatar-box {
+                width: 200px;
+                height: 200px;
+                font-size: 4rem;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-wrap {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .hero-text h1 {
+                font-size: 2.4rem;
+            }
+            .hero-text .typing-wrap {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 68px;
+                left: 0;
+                width: 100%;
+                background: rgba(11, 14, 26, 0.95);
+                backdrop-filter: blur(12px);
+                padding: 24px;
+                gap: 20px;
+                border-bottom: 1px solid rgba(30, 144, 255, 0.1);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger {
+                display: block;
+            }
+            .about-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .skills-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            .cert-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .skills-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+            .hero-text h1 {
+                font-size: 1.8rem;
+            }
+            .avatar-box {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+        }
+
+        /* ===== SCROLL ANIMATION ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PARTICLE CANVAS ===== -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="logo">&lt;Erwin<span>Dev</span>/&gt;</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#skill">Skill</a></li>
+                <li><a href="#proyek">Proyek</a></li>
+                <li><a href="#sertifikat">Sertifikat</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Halo, Saya <span class="highlight">Erwin</span></h1>
+                    <div class="typing-wrap">
+                        <span id="typed-text"></span><span class="cursor"></span>
+                    </div>
+                    <p>Fullstack Developer • Frontend Enthusiast • UI/UX Designer • ML Explorer. Membangun solusi digital dengan kode dan kreativitas.</p>
+                    <div class="hero-badges">
+                        <span class="badge">⚛ React</span>
+                        <span class="badge">🐘 Laravel</span>
+                        <span class="badge">🐍 Python</span>
+                        <span class="badge">🐳 Docker</span>
+                    </div>
+                    <div class="hero-btns">
+                        <a href="#proyek" class="btn btn-primary">Lihat Proyek</a>
+                        <a href="#kontak" class="btn btn-outline">Hubungi Saya</a>
+                    </div>
+                </div>
+                <div class="hero-avatar">
+                    <div class="avatar-box">
+                        <div class="ring"></div>
+                        <img src="asset/pp bulat erein ganteng.png" width="305px" alt="Erwin Setiawan">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TENTANG ===== -->
+    <section id="tentang">
+        <div class="container">
+            <h2 class="section-title reveal">Tentang <span class="highlight">Saya</span></h2>
+            <p class="section-sub reveal">Siapa di balik layar?</p>
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <p>Saya <strong>Erwin Setiawan</strong>, lahir 08 September 2008. Seorang Fullstack Developer yang fokus pada Frontend, UI/UX, dan Machine Learning. Saya percaya bahwa kode yang baik adalah kode yang menyenangkan untuk digunakan dan dilihat.</p>
+                    <p>Saat ini saya aktif mengembangkan proyek-proyek berbasis web dengan <strong>Laravel, React, Next.js</strong>, serta eksplorasi di bidang AI/ML. Saya juga memiliki 5 sertifikat di bidang IT yang menjadi bukti komitmen saya untuk terus belajar.</p>
+                </div>
+                <div class="about-stats reveal">
+                    <div class="stat-card">
+                        <div class="number">2+</div>
+                        <div class="label">Tahun Belajar</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">5</div>
+                        <div class="label">Sertifikat IT</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">10+</div>
+                        <div class="label">Proyek Selesai</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SKILL ===== -->
+    <section id="skill" style="background: rgba(30,144,255,0.02);">
+        <div class="container">
+            <h2 class="section-title reveal">Tech <span class="highlight">Stack</span></h2>
+            <p class="section-sub reveal">Tools & teknologi yang saya kuasai</p>
+            <div class="skills-grid reveal">
+                <div class="skill-item"><i class="fab fa-html5"></i><span>HTML5</span></div>
+                <div class="skill-item"><i class="fab fa-css3-alt"></i><span>CSS3</span></div>
+                <div class="skill-item"><i class="fab fa-js"></i><span>JavaScript</span></div>
+                <div class="skill-item"><i class="fab fa-php"></i><span>PHP</span></div>
+                <div class="skill-item"><i class="fab fa-laravel"></i><span>Laravel</span></div>
+                <div class="skill-item"><i class="fab fa-react"></i><span>React</span></div>
+                <div class="skill-item"><i class="fab fa-node-js"></i><span>Next.js</span></div>
+                <div class="skill-item"><i class="fab fa-python"></i><span>Python</span></div>
+                <div class="skill-item"><i class="fas fa-database"></i><span>MySQL</span></div>
+                <div class="skill-item"><i class="fab fa-docker"></i><span>Docker</span></div>
+                <div class="skill-item"><i class="fas fa-paint-brush"></i><span>UI/UX</span></div>
+                <div class="skill-item"><i class="fas fa-brain"></i><span>ML</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROYEK ===== -->
+    <section id="proyek">
+        <div class="container">
+            <h2 class="section-title reveal">Proyek <span class="highlight">Unggulan</span></h2>
+            <p class="section-sub reveal">Beberapa karya yang sudah saya bangun</p>
+            <div class="projects-grid">
+                <div class="project-card reveal">
+                    <div class="icon"><i class="fas fa-soap"></i></div>
+                    <h3>Laundry7Clean</h3>
+                    <p>Platform manajemen laundry berbasis web dengan fitur order, tracking, dan dashboard admin.</p>
+                    <div class="tech">
+                        <span>Laravel</span>
+                        <span>MySQL</span>
+                        <span>Bootstrap</span>
+                    </div>
+                </div>
+                <div class="project-card reveal">
+                    <div class="icon"><i class="fas fa-code"></i></div>
+                    <h3>Portfolio Next.js</h3>
+                    <p>Portfolio pribadi modern dengan Next.js, Tailwind CSS, dan animasi interaktif.</p>
+                    <div class="tech">
+                        <span>Next.js</span>
+                        <span>Tailwind</span>
+                        <span>Framer</span>
+                    </div>
+                </div>
+                <div class="project-card reveal">
+                    <div class="icon"><i class="fas fa-robot"></i></div>
+                    <h3>ML Sentiment Analyzer</h3>
+                    <p>Analisis sentimen berbasis machine learning untuk klasifikasi teks positif/negatif.</p>
+                    <div class="tech">
+                        <span>Python</span>
+                        <span>TensorFlow</span>
+                        <span>Flask</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SERTIFIKAT ===== -->
+    <section id="sertifikat" style="background: rgba(30,144,255,0.02);">
+        <div class="container">
+            <h2 class="section-title reveal">Sertifikat <span class="highlight">IT</span></h2>
+            <p class="section-sub reveal">5 sertifikat yang membuktikan perjalanan belajarku</p>
+            <div class="cert-grid">
+                <div class="cert-card reveal">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Web Development</h4>
+                    <p>Dicoding • 2024</p>
+                </div>
+                <div class="cert-card reveal">
+                    <i class="fas fa-certificate"></i>
+                    <h4>JavaScript Expert</h4>
+                    <p>FreeCodeCamp • 2024</p>
+                </div>
+                <div class="cert-card reveal">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Laravel Framework</h4>
+                    <p>BuildWithAngga • 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Machine Learning</h4>
+                    <p>Google Developer • 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <i class="fas fa-certificate"></i>
+                    <h4>UI/UX Design</h4>
+                    <p>BINUS • 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== KONTAK ===== -->
+    <section id="kontak">
+        <div class="container">
+            <h2 class="section-title reveal">Hubungi <span class="highlight">Saya</span></h2>
+            <p class="section-sub reveal">Ada pertanyaan atau kolaborasi? Yuk, ngobrol!</p>
+            <div class="contact-wrap">
+                <div class="contact-info reveal">
+                    <h3>Mari Terhubung</h3>
+                    <p>Saya selalu terbuka untuk diskusi, proyek menarik, atau sekadar bertukar cerita seputar teknologi.</p>
+                    <div class="contact-social">
+                        <a href="#" target="_blank" id="igLink"><i class="fab fa-instagram"></i></a>
+                        <!-- Ganti link IG di JS atau ganti href langsung di sini -->
+                        <a href="https://github.com/Erwyyzz/" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <form class="contact-form reveal" id="contactForm">
+                    <input type="text" placeholder="Nama Lengkap" required />
+                    <input type="email" placeholder="Email Aktif" required />
+                    <input type="text" placeholder="Subjek" />
+                    <textarea rows="4" placeholder="Pesan kamu..." required></textarea>
+                    <button type="submit" class="btn btn-primary">Kirim Pesan 🚀</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Erwin Setiawan • Dibuat dengan <span class="heart">❤</span> dan kafein ☕</p>
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ========================
+        // 1. PARTICLE SYSTEM
+        // ========================
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.speedY = (Math.random() - 0.5) * 0.6;
+                this.opacity = Math.random() * 0.6 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > w) this.speedX *= -1;
+                if (this.y < 0 || this.y > h) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(30, 144, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles(count = 100) {
+            particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function connectParticles() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a + 1; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 140) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.strokeStyle = `rgba(30, 144, 255, ${0.08 * (1 - dist / 140)})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ========================
+        // 2. TYPING EFFECT
+        // ========================
+        const roles = [
+            'Fullstack Developer',
+            'Frontend Enthusiast',
+            'UI/UX Designer',
+            'ML Explorer'
+        ];
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typedSpan = document.getElementById('typed-text');
+
+        function typeEffect() {
+            const current = roles[roleIndex];
+            if (!isDeleting) {
+                typedSpan.textContent = current.slice(0, charIndex + 1);
+                charIndex++;
+                if (charIndex === current.length) {
+                    isDeleting = true;
+                    setTimeout(typeEffect, 2500);
+                    return;
+                }
+                setTimeout(typeEffect, 100);
+            } else {
+                typedSpan.textContent = current.slice(0, charIndex - 1);
+                charIndex--;
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    roleIndex = (roleIndex + 1) % roles.length;
+                    setTimeout(typeEffect, 400);
+                    return;
+                }
+                setTimeout(typeEffect, 40);
+            }
+        }
+        typeEffect();
+
+        // ========================
+        // 3. SCROLL REVEAL
+        // ========================
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ========================
+        // 4. HAMBURGER MENU
+        // ========================
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Tutup menu saat klik link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // ========================
+        // 5. FORM KONTAK
+        // ========================
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('.btn');
+            const original = btn.textContent;
+            btn.textContent = 'Terkirim! ✅';
+            btn.style.opacity = '0.7';
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.opacity = '1';
+                this.reset();
+            }, 2500);
+        });
+
+        // ========================
+        // 6. SET LINK IG (sesuai request)
+        // ========================
+        // Ganti URL di bawah dengan link IG kamu
+        document.getElementById('igLink').href = 'https://www.instagram.com/erwinsetiawan_08/';
+        // atau kalau mau diisi manual di VS Code, tinggal ubah href di HTML-nya aja.
+
+        // ========================
+        // 7. NAVBAR SCROLL EFFECT
+        // ========================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(11, 14, 26, 0.9)';
+                navbar.style.borderBottom = '1px solid rgba(30,144,255,0.2)';
+            } else {
+                navbar.style.background = 'rgba(11, 14, 26, 0.75)';
+                navbar.style.borderBottom = '1px solid rgba(30,144,255,0.15)';
+            }
+        });
+
+        console.log('🚀 Portfolio Erwin Setiawan siap!');
+        console.log('📌 Jangan lupa ganti link IG di #igLink ya!');
+    </script>
+
+</body>
+</html>
